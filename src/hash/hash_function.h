@@ -5,4 +5,4 @@
 #include <openssl/err.h>
 #include <vector>
 
-std::vector<unsigned char> hash_calculator(char* msg);
+std::vector<unsigned char> hash_calculator(const char* msg);

@@ -15,28 +15,22 @@ set(OPENSSL_ROOT_DIR "B:\\vcpkg\\packages\\openssl_x64-windows")
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Core)
 
-
 add_subdirectory(src/hash)
 add_subdirectory(src/cipher)
 
 set(PROJECT_SOURCES
         src/main.cpp
-        src/homepage.cpp
-        src/homepage.h
-        src/homepage.ui
-        src/mainwindow.h
-        src/mainwindow.cpp
-        src/mainwindow.ui
-        src/createpassword.h
-        src/createpassword.cpp
-        src/createpassword.ui
+        src/global_variables.h
+        src/homepage.h src/homepage.cpp src/homepage.ui
+        src/mainwindow.h src/mainwindow.cpp src/mainwindow.ui
+        src/createpassword.h src/createpassword.cpp src/createpassword.ui
+        src/Password_Utilities/password.h src/Password_Utilities/password.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(Password_Generator
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        src/global_variables.h
     )
 endif()
 

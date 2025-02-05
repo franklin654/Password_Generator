@@ -3,6 +3,15 @@
 
 #include <QMainWindow>
 #include <QFile>
+#include <QVector>
+#include <QPushButton>
+#include <QString>
+#include <QLineEdit>
+#include <QDebug>
+#include <QMessageBox>
+#include "global_variables.h"
+#include "hash/hash_function.h"
+#include "mainwidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,7 +28,14 @@ public:
     ~HomePage();
 
 private:
+
+    /* attributes */
+
     Ui::HomePage *ui;
-    QFile keyHash;
+    std::vector<unsigned char> keyHash;
+    MainWidget* next;
+
+private slots:
+    void authenticate();
 };
 #endif // HOMEPAGE_H
