@@ -1,29 +1,31 @@
 #include "encrypt.h"
-#include "key.h"
-#include "b64/base64.h"
+#include <iostream>
+#include <cstring>
 
-Json::Value encrypt(char* msg, char* pass_key) {
+/**
+ * @brief Encrypts the message.
+ * @param msg pointer to the plain text you want to encrypt.
+ * @param pass_key pointer to the password you want to use for cipher generation.
+ * @return returns a Json::Value of object type containing ciphertext and initialization vector.
+ */
+Json::Value encrypt(const char* msg, unsigned char* key) {
 	
 	/* make sure the password is not null */
-	assert((msg != nullptr, pass_key != nullptr));
+    assert((msg != nullptr && key != nullptr));
 
 	/* variables to store output */
 	unsigned char outBuf[512+EVP_MAX_BLOCK_LENGTH];
 	int outlen, tmplen;
 
-	/*
-	* generating key and iv
-	*/
-	unsigned char *key = key_generator(pass_key);
+    /* generating key and iv */
+    // unsigned char *key = key_generator(pass_key);
 	unsigned char iv[12];
 	if (RAND_bytes(iv, 12) < 0) {
 		fprintf(stderr, "cipher intialization vector generation failed\n");
 		return Json::Value(Json::nullValue);
 	}
 
-	/*
-	* Creating a EVP_Cipher_CTX
-	*/
+    /* Creating a EVP_Cipher_CTX */
 	EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
 	if (!ctx) {
 		fprintf(stderr, "cipher context initialization failed\n");
@@ -31,9 +33,7 @@ Json::Value encrypt(char* msg, char* pass_key) {
 		return Json::Value(Json::nullValue);
 	}
 
-	/*
-	* generating an encryptor
-	*/
+    /* generating an encryptor */
 	if (!EVP_EncryptInit_ex2(ctx, EVP_aes_256_gcm(), key, iv, NULL)) {
 		fprintf(stderr, "cipher intialization failed\n");
 		EVP_CIPHER_CTX_free(ctx);
@@ -41,10 +41,8 @@ Json::Value encrypt(char* msg, char* pass_key) {
 	}
 	EVP_CIPHER_CTX_set_padding(ctx, 0);
 
-	/*
-	* generating the cipher text
-	*/
-	if (!EVP_EncryptUpdate(ctx, outBuf, &outlen, reinterpret_cast<unsigned char*>(msg), strlen(msg))) {
+    /* generating the cipher text */
+    if (!EVP_EncryptUpdate(ctx, outBuf, &outlen, reinterpret_cast<const unsigned char*>(msg), strlen(msg))) {
 		fprintf(stderr, "plain text encryption failed\n");
 		EVP_CIPHER_CTX_free(ctx);
 		return Json::Value(Json::nullValue);
@@ -53,7 +51,7 @@ Json::Value encrypt(char* msg, char* pass_key) {
 	/*
 	 * Buffer passed to EVP_EncryptFinal() after data is 
 	 * encrypted to avoid overwriting it.
-	*/
+    */
 	if (!EVP_EncryptFinal_ex(ctx, outBuf + outlen, &tmplen)) {
 		fprintf(stderr, "error occurred while writing the final block of cipher text\n");
 		EVP_CIPHER_CTX_free(ctx);
@@ -63,7 +61,6 @@ Json::Value encrypt(char* msg, char* pass_key) {
 
 	/* Clean UP */
 	EVP_CIPHER_CTX_free(ctx);
-	OPENSSL_free(key);
 
 	/* Encoding the ciphertext and iv into base64 for storage */
 	unsigned char base64Cipher[128];
@@ -81,10 +78,15 @@ Json::Value encrypt(char* msg, char* pass_key) {
 	return root;
 }
 
-std::string decrypt(Json::Value root, char* passkey) {
+/**
+ * @brief decrypts the ciphertext.
+ * @param root Json object which contains the ciphertext and the initialization vector.
+ * @param passkey pointer to the pass_key used as a key for the cipher.
+ * @return A std::string containing the decrypted plain text.
+ */
+std::string decrypt(Json::Value root, unsigned char* key) {
 	unsigned char* plainTextBytes = (unsigned char*)malloc(512);
 	unsigned char* in = (unsigned char*)malloc(512);
-	unsigned char* key = key_generator(passkey);
 	unsigned char* iv = (unsigned char*)malloc(12);
 	int plainTextBytes_len, out_len, in_len, iv_length;
 	EVP_CIPHER_CTX* ctx;
@@ -96,7 +98,8 @@ std::string decrypt(Json::Value root, char* passkey) {
 
 	/* Retrieving iv */
 	const char* encodedIV = root["cipher_iv"].asCString();
-	iv_length = EVP_DecodeBlock(iv, reinterpret_cast<const unsigned char*>(encodedIV), strlen(encodedIV));
+    if(!EVP_DecodeBlock(iv, reinterpret_cast<const unsigned char*>(encodedIV), strlen(encodedIV)))
+        handleErrors();
 
 	/* Create and initialize the context */
 	if (!(ctx = EVP_CIPHER_CTX_new())) {
@@ -104,9 +107,7 @@ std::string decrypt(Json::Value root, char* passkey) {
 		handleErrors();
 	}
 
-	/*
-	* Initialize the decryption operation.
-	*/
+    /* Initialize the decryption operation. */
 	if(1 != EVP_DecryptInit_ex(ctx, EVP_aes_256_gcm(), NULL, key, iv))
 		handleErrors();
 
@@ -125,7 +126,6 @@ std::string decrypt(Json::Value root, char* passkey) {
 
 	/* Clean UP */
 	EVP_CIPHER_CTX_free(ctx);
-	free(key);
 	free(in);
 	free(iv);
 	free(plainTextBytes);
@@ -133,6 +133,9 @@ std::string decrypt(Json::Value root, char* passkey) {
 	return plainText;
 }
 
+/**
+ * @brief handles the errors that occurred during encryption or decryption operations.
+ */
 void handleErrors() {
 	ERR_print_errors_fp(stderr);
 	abort();

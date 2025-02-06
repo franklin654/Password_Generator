@@ -1,11 +1,19 @@
 #include "homepage.h"
 #include "./ui_homepage.h"
+#include "hash/hash_function.h"
+#include <QPushButton>
+#include <QString>
+#include <QLineEdit>
+#include <QMessageBox>
+#include <QClipboard>
+#include <regex>
 
 
 HomePage::HomePage(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::HomePage)
     , next(new MainWidget(this))
+    , globalVariables(Singleton::getInstance())
 {
     ui->setupUi(this);
     this->setWindowTitle("Password Manager");
@@ -27,8 +35,7 @@ void HomePage::authenticate()
     QString passwd = ui->inputMasterPasskey->text();
     re->setPattern("^[ \t\n]+|[' '\t\n\f\r]+$");
     passwd.remove(*re);
-    re->setPattern("^([A-Za-z])(?=.*[0-9])(?=[A-Za-z])(?=.*[!@#$&*])");
-    if (!re->match(passwd).hasMatch() || passwd.length() < 8) {
+    if (!std::regex_search(passwd.toStdString(), std::regex{"(?=.*[[:lower:]])(?=.*[[:upper:]])(?=.*[[:digit:]])(?=.*[[:punct:]])"}) || passwd.length() < 8) {
         QMessageBox msgBox(QMessageBox::Icon::Information,
                            "Invalid Password",
                            "Password must be Minimum 8 characters has at least one letter, one number and one special character",
@@ -38,11 +45,10 @@ void HomePage::authenticate()
         return;
     }
     std::vector<unsigned char> inputHash = hash_calculator((const char*)passwd.toStdString().c_str());
-    if (1 || inputHash == this->keyHash) {
+    if (1||inputHash == globalVariables->keyHash) {
         /*
          * Launch the Main Window
          */
-        qDebug() << "Password Authenticated" << Qt::endl;
         next->show();
         ui->centralwidget->hide();
     }

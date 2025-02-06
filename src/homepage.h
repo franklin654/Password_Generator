@@ -2,16 +2,8 @@
 #define HOMEPAGE_H
 
 #include <QMainWindow>
-#include <QFile>
-#include <QVector>
-#include <QPushButton>
-#include <QString>
-#include <QLineEdit>
-#include <QDebug>
-#include <QMessageBox>
-#include "global_variables.h"
-#include "hash/hash_function.h"
 #include "mainwidget.h"
+#include "global_variables.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -32,8 +24,8 @@ private:
     /* attributes */
 
     Ui::HomePage *ui;
-    std::vector<unsigned char> keyHash;
     MainWidget* next;
+    Singleton* globalVariables;
 
 private slots:
     void authenticate();

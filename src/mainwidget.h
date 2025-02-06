@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QMainWindow>
 #include <QResizeEvent>
+#include "global_variables.h"
+#include "createpassword.h"
 
 namespace Ui {
 class MainWidget;
@@ -23,9 +25,19 @@ protected:
 private:
     Ui::MainWidget *ui;
     QStringList fileList;
-    QDialog* createPasswordDialog;
+    CreatePassword* createPasswordDialog;
+    QString Password;
+    QString WebSiteName;
+    QString userName;
+    Singleton* globalVariables;
 
     void load_files();
+    bool getPasswordFromFile(QString fileName);
+
+private slots:
+    void getSelectedPassword();
+    void editSelectedPassword();
+    void clearSelection();
 
 };
 

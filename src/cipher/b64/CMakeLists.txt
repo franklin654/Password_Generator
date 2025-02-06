@@ -1,1 +1,0 @@
-add_library(b64 base64.cpp)

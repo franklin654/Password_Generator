@@ -10,10 +10,6 @@ find_package(jsoncpp CONFIG REQUIRED)
 
 add_library(Cipher ${CIPHER_SOURCES})
 
-add_subdirectory("b64")
-target_link_libraries(Cipher PUBLIC b64)
-target_include_directories(Cipher PUBLIC "${PROJECT_SOURCE_DIR}\\b64")
-
 if(${OpenSSL_FOUND})
 	target_include_directories(Cipher PUBLIC OpenSSL::Crypto OpenSSL::SSL)
 	target_link_libraries(Cipher PUBLIC OpenSSL::Crypto OpenSSL::SSL)

@@ -20,9 +20,9 @@ add_subdirectory(src/cipher)
 
 set(PROJECT_SOURCES
         src/main.cpp
-        src/global_variables.h
+        src/global_variables.h src/global_variables.cpp
         src/homepage.h src/homepage.cpp src/homepage.ui
-        src/mainwindow.h src/mainwindow.cpp src/mainwindow.ui
+        src/mainwidget.h src/mainwidget.cpp src/mainwidget.ui
         src/createpassword.h src/createpassword.cpp src/createpassword.ui
         src/Password_Utilities/password.h src/Password_Utilities/password.cpp
 )
