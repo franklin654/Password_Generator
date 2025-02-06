@@ -45,7 +45,7 @@ void HomePage::authenticate()
         return;
     }
     std::vector<unsigned char> inputHash = hash_calculator((const char*)passwd.toStdString().c_str());
-    if (1||inputHash == globalVariables->keyHash) {
+    if (inputHash == globalVariables->keyHash) {
         /*
          * Launch the Main Window
          */

@@ -24,6 +24,7 @@ MainWidget::MainWidget(QWidget *parent)
     QObject::connect(ui->view, &QPushButton::clicked, this, &MainWidget::getSelectedPassword);
     QObject::connect(ui->edit, &QPushButton::clicked, this, &MainWidget::editSelectedPassword);
     QObject::connect(ui->clear, &QPushButton::clicked, this, &MainWidget::clearSelection);
+    QObject::connect(ui->searchBar, &QLineEdit::textEdited, this, &MainWidget::filterFiles);
 }
 
 MainWidget::~MainWidget()
@@ -115,6 +116,19 @@ void MainWidget::clearSelection()
     this->Password.clear();
     this->WebSiteName.clear();
     this->userName.clear();
+}
+
+void MainWidget::filterFiles(QString text)
+{
+    ui->passwordsListWidget->clear();
+    QStringList filters;
+    filters << text+"*.json";
+    passwordDir->setNameFilters(filters);
+    QStringList fileList = passwordDir->entryList(QDir::Filter::Files|QDir::Filter::NoDotAndDotDot);
+    if(fileList.isEmpty())
+        return;
+    fileList.replaceInStrings(".json", "");
+    ui->passwordsListWidget->addItems(fileList);
 }
 
 void MainWidget::showEvent(QShowEvent *event)

@@ -38,6 +38,7 @@ private slots:
     void getSelectedPassword();
     void editSelectedPassword();
     void clearSelection();
+    void filterFiles(QString text);
 
 };
 
