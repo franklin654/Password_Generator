@@ -1,3 +1,5 @@
+Here is the updated README file with the "Install Dependencies" section:
+
 # Password_Generator
 
 ## Description
@@ -9,8 +11,23 @@ This repository contains a Password Generator application written in C++. The ap
 - User-friendly interface built with Qt.
 
 ## Installation
-To build and run the application, you need a C++ compiler and Qt framework installed on your system.
+To build and run the application, you need a C++ compiler, Qt framework, and vcpkg for dependency management.
 
+### Install Dependencies
+1. Install [vcpkg](https://github.com/microsoft/vcpkg):
+    ```sh
+    git clone https://github.com/microsoft/vcpkg.git
+    cd vcpkg
+    ./bootstrap-vcpkg.sh
+    ./vcpkg integrate install
+    ```
+2. Use vcpkg to install jsoncpp and OpenSSH:
+    ```sh
+    ./vcpkg install jsoncpp
+    ./vcpkg install openssh
+    ```
+
+### Build the Project
 1. Clone the repository:
     ```sh
     git clone https://github.com/franklin654/Password_Generator.git
