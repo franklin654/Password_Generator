@@ -101,7 +101,6 @@ void MasterPassword::changeMasterPassword()
         return;
     }
     for (auto it=fileList.begin();it != fileList.end();++it) {
-        qDebug() << *it;
         reEncryptPassword(inputHash, it->toStdString());
     }
 }

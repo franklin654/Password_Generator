@@ -3,8 +3,9 @@
 #include <qdebug.h>
 #include <random>
 #include <QRandomGenerator>
+#include <string_view>
 
-std::string specialChars{"!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"};
+std::string_view specialChars{"!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"};
 std::string_view LowerCaseAlphabet{"abcdefghijklmnopqrtsuvwxyz"};
 std::string_view UpperCaseAlphabet{"ABCDEFGHIJKLMNOPQRSTUVWXYZ"};
 std::string_view numbers{"0123456789"};

@@ -20,15 +20,14 @@ MainWidget::MainWidget(QWidget *parent)
     ui->displayLabel->hide();
     this->layout()->setAlignment(ui->pushButton, Qt::AlignmentFlag::AlignHCenter);
     QObject::connect(ui->create, &QPushButton::clicked, createPasswordDialog, &CreatePassword::open);
-    QObject::connect(this->createPasswordDialog, &CreatePassword::passwordGenerated, this, [this](QString a){
-        qDebug() << a;
-        this->ui->passwordsListWidget->addItem(a);
-    });
     QObject::connect(ui->view, &QPushButton::clicked, this, &MainWidget::getSelectedPassword);
     QObject::connect(ui->edit, &QPushButton::clicked, this, &MainWidget::editSelectedPassword);
     QObject::connect(ui->clear, &QPushButton::clicked, this, &MainWidget::clearSelection);
-    QObject::connect(ui->searchBar, &QLineEdit::textEdited, this, &MainWidget::searchPasswords);
     QObject::connect(ui->pushButton, &QPushButton::clicked, masterPasswordDialog, &MasterPassword::open);
+    QObject::connect(ui->searchBar, &QLineEdit::textEdited, this, &MainWidget::searchPasswords);
+    QObject::connect(this->createPasswordDialog, &CreatePassword::passwordGenerated, this, [this](QString a){
+        this->ui->passwordsListWidget->addItem(a);
+    });
 }
 
 MainWidget::~MainWidget()
@@ -120,6 +119,7 @@ void MainWidget::clearSelection()
     this->Password.clear();
     this->WebSiteName.clear();
     this->userName.clear();
+    ui->copy->setDisabled(true);
 }
 
 void MainWidget::searchPasswords(QString text)

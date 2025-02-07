@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QClipboard>
 #include <QGuiApplication>
+#include <iostream>
 
 Singleton::Singleton()
 {
@@ -24,7 +25,6 @@ Singleton *Singleton::getInstance()
 
 void Singleton::getKeyHash() {
     if (!hashFile->exists()) {
-        qDebug() << "File does not exist" << Qt::endl;
         setKeyHash();
         return;
     }
@@ -32,7 +32,6 @@ void Singleton::getKeyHash() {
     unsigned char buff[32];
     in.read(reinterpret_cast<char*>(buff), 32*sizeof(char));
     if (in.gcount() != 32) {
-        qDebug() << in.gcount() << Qt::endl;
         setKeyHash();
         return;
     }
