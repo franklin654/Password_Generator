@@ -6,6 +6,7 @@
 #include <QResizeEvent>
 #include "global_variables.h"
 #include "createpassword.h"
+#include "masterpassword.h"
 
 namespace Ui {
 class MainWidget;
@@ -24,12 +25,13 @@ protected:
 
 private:
     Ui::MainWidget *ui;
-    QStringList fileList;
     CreatePassword* createPasswordDialog;
+    Singleton* globalVariables;
+    MasterPassword* masterPasswordDialog;
+    QStringList fileList;
     QString Password;
     QString WebSiteName;
     QString userName;
-    Singleton* globalVariables;
 
     void load_files();
     bool getPasswordFromFile(QString fileName);

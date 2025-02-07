@@ -25,6 +25,7 @@ set(PROJECT_SOURCES
         src/mainwidget.h src/mainwidget.cpp src/mainwidget.ui
         src/createpassword.h src/createpassword.cpp src/createpassword.ui
         src/Password_Utilities/password.h src/Password_Utilities/password.cpp
+        src/masterpassword.h src/masterpassword.cpp src/masterpassword.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

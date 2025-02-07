@@ -7,7 +7,7 @@
 #include <QMessageBox>
 #include <QClipboard>
 #include <regex>
-
+#include <json/json.h>
 
 HomePage::HomePage(QWidget *parent)
     : QMainWindow(parent)

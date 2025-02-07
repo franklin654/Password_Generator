@@ -10,12 +10,15 @@
 MainWidget::MainWidget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::MainWidget)
-    , createPasswordDialog(new CreatePassword(this))
     , globalVariables(Singleton::getInstance())
+    , createPasswordDialog(new CreatePassword(this))
+    , masterPasswordDialog(new MasterPassword(this))
 {
     ui->setupUi(this);
     ui->copy->setEnabled(false);
+    ui->pushButton->setEnabled(true);
     ui->displayLabel->hide();
+    this->layout()->setAlignment(ui->pushButton, Qt::AlignmentFlag::AlignHCenter);
     QObject::connect(ui->create, &QPushButton::clicked, createPasswordDialog, &CreatePassword::open);
     QObject::connect(this->createPasswordDialog, &CreatePassword::passwordGenerated, this, [this](QString a){
         qDebug() << a;
@@ -25,6 +28,7 @@ MainWidget::MainWidget(QWidget *parent)
     QObject::connect(ui->edit, &QPushButton::clicked, this, &MainWidget::editSelectedPassword);
     QObject::connect(ui->clear, &QPushButton::clicked, this, &MainWidget::clearSelection);
     QObject::connect(ui->searchBar, &QLineEdit::textEdited, this, &MainWidget::filterFiles);
+    QObject::connect(ui->pushButton, &QPushButton::clicked, masterPasswordDialog, &MasterPassword::open);
 }
 
 MainWidget::~MainWidget()
