@@ -1,5 +1,3 @@
-Here is the updated README file with the "Install Dependencies" section:
-
 # Password_Generator
 
 ## Description
