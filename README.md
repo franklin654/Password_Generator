@@ -1,4 +1,4 @@
-# Password_Generator
+# Password Generator
 
 ## Description
 This repository contains a Password Generator application written in C++. The application is designed to create and manage passwords securely.
