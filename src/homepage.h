@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "mainwidget.h"
 #include "global_variables.h"
+#include <json/json.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -27,7 +28,10 @@ private:
     MainWidget* next;
     Singleton* globalVariables;
 
+    Json::Value writePasswordtoFile(QString fileName);
+
 private slots:
     void authenticate();
+    void dumpPassword();
 };
 #endif // HOMEPAGE_H

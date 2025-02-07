@@ -33,14 +33,23 @@ private:
     QString WebSiteName;
     QString userName;
 
+    /**
+     * @brief load_files get all the stored passwords
+     */
     void load_files();
+
+    /**
+     * @brief getPasswordFromFile get the decrypted password
+     * @param fileName password name
+     * @return returns if password is found and decrypted or not
+     */
     bool getPasswordFromFile(QString fileName);
 
 private slots:
     void getSelectedPassword();
     void editSelectedPassword();
     void clearSelection();
-    void filterFiles(QString text);
+    void searchPasswords(QString text);
 
 };
 

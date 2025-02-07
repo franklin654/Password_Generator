@@ -27,7 +27,7 @@ MainWidget::MainWidget(QWidget *parent)
     QObject::connect(ui->view, &QPushButton::clicked, this, &MainWidget::getSelectedPassword);
     QObject::connect(ui->edit, &QPushButton::clicked, this, &MainWidget::editSelectedPassword);
     QObject::connect(ui->clear, &QPushButton::clicked, this, &MainWidget::clearSelection);
-    QObject::connect(ui->searchBar, &QLineEdit::textEdited, this, &MainWidget::filterFiles);
+    QObject::connect(ui->searchBar, &QLineEdit::textEdited, this, &MainWidget::searchPasswords);
     QObject::connect(ui->pushButton, &QPushButton::clicked, masterPasswordDialog, &MasterPassword::open);
 }
 
@@ -122,7 +122,7 @@ void MainWidget::clearSelection()
     this->userName.clear();
 }
 
-void MainWidget::filterFiles(QString text)
+void MainWidget::searchPasswords(QString text)
 {
     ui->passwordsListWidget->clear();
     QStringList filters;
